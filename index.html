@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دردشة فورية</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        #messages { height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; }
+        input { width: 80%; padding: 5px; }
+        button { padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🚀 دردشة فورية</h1>
+    <div id="messages"></div>
+    <input id="message" type="text" placeholder="اكتب رسالتك...">
+    <button id="send">إرسال</button>
+
+    <script>
+        function send(idBox) {
+            const msg = document.getElementById(idBox).value;
+            socket.emit('chat message' , msg);
+            document.getElementById(idBox).value = '';
+        }
+        function receveMessage(msg) {
+            
+            const messages = document.getElementById('messages')
+            const newMessage = document.createElement('div')
+            newMessage.textContent = msg 
+            messages.appendChild(newMessage)
+        }
+        const socket = io();
+
+        document.getElementById('send').onclick = () => send('message') 
+        socket.on('chat message',(msg) => receveMessage(msg))
+
+    </script>
+      
+</body>
+</html>
+
+<!-- 
+document.getElementById('send').onclick = () => { // When the send button is clicked
+    const msg = document.getElementById('message').value; // Get the message from the input field
+    socket.emit('chat message', msg); // Send the message to the server
+    document.getElementById('message').value = ""; // Clear the input field
+};
+
+socket.on('chat message', (msg) => { // Listen for incoming messages
+    const messages = document.getElementById('messages'); // Get the messages div
+    const newMessage = document.createElement('div'); // Create a new div for the message
+    newMessage.textContent = msg; // Set the text content to the message
+    messages.appendChild(newMessage); // Append the new message to the messages div
+});
+ -->
